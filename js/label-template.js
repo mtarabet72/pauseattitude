@@ -9,7 +9,7 @@ function labelEmoticon(article) {
 function buildLabelHTML(article) {
   const color = article.couleur || "#3F7EA6";
 
-  const halalBadge = article.halal ? `<div class="label-halal">HALAL / حلال</div>` : "";
+  const halalBadge = article.halal ? `<div class="label-halal">A base d'ingrédients HALAL<br />على أساس مكونات حلال</div>` : "";
 
   const subtitle =
     article.sous_titre_fr || article.sous_titre_ar
@@ -40,7 +40,7 @@ function buildLabelHTML(article) {
         </div>
 
         <div class="label-col-center">
-          <div class="label-logo" style="border-color:${escapeHtml(color)}"><img src="icons/brand-mark.png" alt="" /></div>
+          <div class="label-logo" style="background:${escapeHtml(color)}"><img src="icons/brand-mark.png" alt="" /></div>
           <div class="label-nutrition-title">Valeurs<br />énergétiques</div>
           <div class="label-nutrition-pills">
             <div class="label-nutrition-pill" style="background:${escapeHtml(color)}">Énergie</div>
@@ -71,7 +71,7 @@ function buildLabelHTML(article) {
           ${escapeHtml(article.conservation || "")}
           <span class="label-weight">${article.poids_gr ? escapeHtml(article.poids_gr) + " g" : ""}</span>
         </div>
-        <div class="label-fresh" style="border-color:${escapeHtml(color)}">Fresh<br />Daily</div>
+        <div class="label-fresh" style="background:${escapeHtml(color)}">Fresh<br />Daily</div>
         <div class="label-barcode-wrap">${barcodeBlock}</div>
       </div>
 
