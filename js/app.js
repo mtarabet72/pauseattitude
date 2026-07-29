@@ -1,4 +1,4 @@
-// app.js — Bootstrap de l'application.
+þ// app.js — Bootstrap de l'application.
 
 const APP_STEPS = {
   articles: "Étape 2 — Gestion des articles",
