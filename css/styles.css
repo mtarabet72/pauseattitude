@@ -89,17 +89,13 @@ a { color: inherit; }
 }
 
 .brand-mark {
-  font-family: var(--font-mono);
-  font-size: 15px;
   background: var(--paper);
-  color: var(--ink);
-  border-radius: var(--radius-sm);
+  border-radius: 50%;
   width: 36px;
   height: 36px;
-  display: grid;
-  place-items: center;
+  object-fit: contain;
+  padding: 3px;
   flex-shrink: 0;
-  transform: rotate(-4deg);
 }
 
 .brand-text {
