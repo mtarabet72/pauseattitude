@@ -1,0 +1,70 @@
+/* print.css — Planche d'impression A4 : 12 étiquettes (4×3) de 50×80mm,
+   marges 5mm (côtés) / 27mm (haut-bas), conformes au plan fourni. */
+
+.print-sheet {
+  width: 210mm;
+  height: 297mm;
+  background: #fff;
+  padding: 27mm 5mm;
+  box-sizing: border-box;
+  margin: 0 auto 18px;
+  box-shadow: 0 1px 2px rgba(28, 27, 25, 0.08), 0 8px 24px rgba(28, 27, 25, 0.12);
+  zoom: 0.4; /* aperçu réduit à l'écran ; remis à l'échelle 1 à l'impression */
+}
+
+.print-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 50mm);
+  grid-template-rows: repeat(3, 80mm);
+  width: 200mm;
+  height: 240mm;
+}
+
+.print-grid .label {
+  --mm: 1mm;
+}
+
+.print-page-label {
+  text-align: center;
+  font-size: 12px;
+  color: var(--ink-soft, #4a473f);
+  margin: -10px 0 18px;
+}
+
+@media print {
+  body * {
+    visibility: hidden;
+  }
+
+  #print-area,
+  #print-area * {
+    visibility: visible;
+  }
+
+  #print-area {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: auto;
+  }
+
+  .print-sheet {
+    zoom: 1 !important;
+    box-shadow: none;
+    margin: 0;
+    page-break-after: always;
+  }
+
+  .print-sheet:last-child {
+    page-break-after: auto;
+  }
+
+  .print-page-label {
+    display: none;
+  }
+
+  @page {
+    size: A4;
+    margin: 0;
+  }
+}
