@@ -1,9 +1,5 @@
 // app.js — Bootstrap de l'application.
 
-const APP_STEPS = {
-  impression: "Étape 4 — Mise en page impression A4 (4×3)",
-};
-
 function emptyStateView(emoticon, title, description) {
   return `
     <div class="empty-state">
@@ -45,12 +41,6 @@ async function renderDashboard(outlet) {
   `;
 }
 
-function renderPlaceholder(key, emoticon, title, description) {
-  return async (outlet) => {
-    outlet.innerHTML = emptyStateView(emoticon, title, `${description}<br><span class="badge" style="margin-top:8px">${APP_STEPS[key]}</span>`);
-  };
-}
-
 function updateNetworkStatus() {
   const pill = document.getElementById("network-status");
   if (!pill) return;
@@ -73,10 +63,7 @@ async function initApp() {
   Router.register("/tableau-de-bord", renderDashboard);
   Router.register("/articles", ArticlesView.render);
   Router.register("/etiquettes", EtiquettesView.render);
-  Router.register(
-    "/impression",
-    renderPlaceholder("impression", "[ ▤ ]", "Mise en page impression", "Générer une planche A4 de 12 étiquettes (4×3, 50×80mm, marges 27mm / 5mm) prête à imprimer.")
-  );
+  Router.register("/impression", ImpressionView.render);
   Router.register("/parametres", async (outlet) => {
     outlet.innerHTML = `
       <div class="card" style="max-width:520px">
