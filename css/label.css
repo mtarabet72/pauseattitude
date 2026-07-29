@@ -69,7 +69,6 @@
   padding: 0 calc(2.2 * var(--mm, 1mm)) calc(0.8 * var(--mm, 1mm));
   display: flex;
   gap: calc(1.1 * var(--mm, 1mm));
-  overflow: hidden;
 }
 
 .label-col-center {
