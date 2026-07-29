@@ -58,18 +58,22 @@ function buildLabelHTML(article) {
           <strong>Allergènes :</strong> ${escapeHtml(article.allergenes_fr) || "—"}
           <div dir="rtl" style="margin-top:calc(0.3 * var(--mm, 1mm))"><strong>الحساسية:</strong> ${escapeHtml(article.allergenes_ar) || "—"}</div>
         </div>
+
+        <div class="label-meta-row">
+          <div class="label-conservation" style="border-color:${escapeHtml(color)}">
+            ${escapeHtml(article.conservation || "")}
+            <span class="label-weight">${article.poids_gr ? escapeHtml(article.poids_gr) + " g" : ""}</span>
+          </div>
+          <div class="label-fresh" style="border-color:${escapeHtml(color)}">Fresh<br />Daily</div>
+          <div class="label-barcode-wrap">${barcodeBlock}</div>
+        </div>
       </div>
 
       <div class="label-footer-band" style="background:${escapeHtml(color)}">
-        <div class="label-conservation">
-          ${escapeHtml(article.conservation || "")}
-          <span class="label-weight">${article.poids_gr ? escapeHtml(article.poids_gr) + " g" : ""}</span>
-        </div>
-        <div class="label-fresh">Fresh<br />Daily</div>
-        <div class="label-barcode-wrap">${barcodeBlock}</div>
+        <span class="label-footer-made">Made by</span>
+        <span class="label-footer-brand">Pause Attitude</span>
+        <span class="label-footer-url">pauseattitude.ma</span>
       </div>
-
-      <div class="label-url">pauseattitude.ma</div>
     </div>
   `;
 }
