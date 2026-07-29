@@ -26,7 +26,7 @@ python3 -m http.server 8080
    git branch -M main
    git remote add origin https://github.com/<votre-utilisateur>/pauseattitude.git
    git push -u origin main
-```
+`.
 
    → nommez le dépôt GitHub **`pauseattitude`** pour que l'URL finale reste cohérente avec le nom de l'application.
 
