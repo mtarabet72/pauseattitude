@@ -2,7 +2,7 @@
 // Stratégie : app shell en cache-first, contenu versionné pour permettre
 // des mises à jour propres à chaque déploiement.
 
-const CACHE_VERSION = "pa-shell-v1";
+const CACHE_VERSION = "pa-shell-v2";
 const APP_SHELL = [
   "./",
   "./index.html",
@@ -11,6 +11,7 @@ const APP_SHELL = [
   "./js/app.js",
   "./js/db.js",
   "./js/router.js",
+  "./js/articles.js",
   "./icons/icon-192.png",
   "./icons/icon-512.png",
   "./icons/icon-maskable-192.png",
