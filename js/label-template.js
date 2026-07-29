@@ -6,10 +6,18 @@ function labelEmoticon(article) {
   return article.halal ? ">>( ° >° )<<" : "}<(((°>";
 }
 
+function formatEditionDate(date = new Date()) {
+  const d = String(date.getDate()).padStart(2, "0");
+  const m = String(date.getMonth() + 1).padStart(2, "0");
+  const y = date.getFullYear();
+  return `${d}/${m}/${y}`;
+}
+
 function buildLabelHTML(article) {
   const color = article.couleur || "#3F7EA6";
 
-  const halalBadge = article.halal ? `<div class="label-halal">A base d'ingrédients HALAL<br />على أساس مكونات حلال</div>` : "";
+  const halalFr = article.halal ? `<div class="label-halal">A base d'ingrédients HALAL</div>` : "";
+  const halalAr = article.halal ? `<div class="label-halal rtl">على أساس مكونات حلال</div>` : "";
 
   const subtitle =
     article.sous_titre_fr || article.sous_titre_ar
@@ -31,11 +39,11 @@ function buildLabelHTML(article) {
         <div class="label-emoticon">${escapeHtml(labelEmoticon(article))}</div>
         <div class="label-name">${escapeHtml(article.nom_fr) || "…"}<span class="sep">•</span>${escapeHtml(article.nom_ar) || "…"}</div>
         ${subtitle}
-        ${halalBadge}
       </div>
 
       <div class="label-columns">
         <div class="label-col-ingredients">
+          ${halalFr}
           <span class="lbl">Ingrédients (FR)</span>${escapeHtml(article.ingredients_fr) || "—"}
         </div>
 
@@ -59,6 +67,7 @@ function buildLabelHTML(article) {
         </div>
 
         <div class="label-col-ingredients rtl">
+          ${halalAr}
           <span class="lbl">المكونات (AR)</span>${escapeHtml(article.ingredients_ar) || "—"}
         </div>
       </div>
@@ -71,7 +80,9 @@ function buildLabelHTML(article) {
       <div class="label-meta-row">
         <div class="label-conservation" style="border-color:${escapeHtml(color)}">
           ${escapeHtml(article.conservation || "")}
+          <div class="label-consume-note">À consommer le jour même<br />يُستهلك في نفس اليوم</div>
           <span class="label-weight">${article.poids_gr ? escapeHtml(article.poids_gr) + " g" : ""}</span>
+          <div class="label-edition-date">Éd. ${formatEditionDate()}</div>
         </div>
         <div class="label-fresh" style="background:${escapeHtml(color)}">Fresh<br />Daily</div>
         <div class="label-barcode-wrap">${barcodeBlock}</div>
