@@ -1,8 +1,6 @@
 // app.js — Bootstrap de l'application.
 
 const APP_STEPS = {
-  articles: "Étape 2 — Gestion des articles",
-  etiquettes: "Étape 3 — Éditeur visuel d'étiquette",
   impression: "Étape 4 — Mise en page impression A4 (4×3)",
 };
 
@@ -74,10 +72,7 @@ async function initApp() {
 
   Router.register("/tableau-de-bord", renderDashboard);
   Router.register("/articles", ArticlesView.render);
-  Router.register(
-    "/etiquettes",
-    renderPlaceholder("etiquettes", "}&lt;(((°&gt;", "Éditeur d'étiquette", "Aperçu fidèle au modèle Pause Attitude, avec la couleur propre à chaque produit.")
-  );
+  Router.register("/etiquettes", EtiquettesView.render);
   Router.register(
     "/impression",
     renderPlaceholder("impression", "[ ▤ ]", "Mise en page impression", "Générer une planche A4 de 12 étiquettes (4×3, 50×80mm, marges 27mm / 5mm) prête à imprimer.")
