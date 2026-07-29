@@ -1,4 +1,4 @@
-þ// app.js — Bootstrap de l'application.
+// app.js — Bootstrap de l'application.
 
 const APP_STEPS = {
   articles: "Étape 2 — Gestion des articles",
@@ -73,10 +73,7 @@ async function initApp() {
   await DB.getAll(DB.STORES.settings).catch(() => []);
 
   Router.register("/tableau-de-bord", renderDashboard);
-  Router.register(
-    "/articles",
-    renderPlaceholder("articles", ">&gt;( ° &gt;° )&lt;&lt;", "Gestion des articles", "Créer, modifier et classer vos articles (ingrédients FR/NL, allergènes, valeurs nutritionnelles, poids, code-barres).")
-  );
+  Router.register("/articles", ArticlesView.render);
   Router.register(
     "/etiquettes",
     renderPlaceholder("etiquettes", "}&lt;(((°&gt;", "Éditeur d'étiquette", "Aperçu fidèle au modèle Pause Attitude, avec la couleur propre à chaque produit.")
