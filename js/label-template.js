@@ -39,8 +39,10 @@ function buildLabelHTML(article) {
           <span class="lbl">Ingrédients (FR)</span>${escapeHtml(article.ingredients_fr) || "—"}
         </div>
 
-        <div class="label-col-center">
-          <div class="label-logo" style="background:${escapeHtml(color)}"><img src="icons/brand-mark.png" alt="" /></div>
+        <div class="label-col-center" style="position:relative;z-index:3">
+          <div class="label-logo" style="position:relative;z-index:3;background:${escapeHtml(color)};width:calc(9 * var(--mm, 1mm));height:calc(9 * var(--mm, 1mm));border-radius:50%;border:2px solid #fff;display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0">
+            <img src="icons/brand-mark.png" alt="" style="width:82%;height:82%;object-fit:contain;display:block" />
+          </div>
           <div class="label-nutrition-title">Valeurs<br />énergétiques</div>
           <div class="label-nutrition-pills">
             <div class="label-nutrition-pill" style="background:${escapeHtml(color)}">Énergie</div>
