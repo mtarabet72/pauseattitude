@@ -35,6 +35,14 @@
   line-height: 1;
 }
 
+.label-icon {
+  display: block;
+  margin: 0 auto;
+  max-height: calc(8 * var(--mm, 1mm));
+  max-width: 60%;
+  filter: brightness(0) invert(1);
+}
+
 .label-name {
   font-family: "Space Grotesk", sans-serif;
   font-weight: 700;
