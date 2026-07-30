@@ -15,6 +15,9 @@ function formatEditionDate(date = new Date()) {
 
 function buildLabelHTML(article) {
   const color = article.couleur || "#3F7EA6";
+  const headerIcon = article.icone_entete
+    ? `<img src="${escapeHtml(article.icone_entete)}" alt="" class="label-icon" />`
+    : `<div class="label-emoticon">${escapeHtml(labelEmoticon(article))}</div>`;
 
   const halalFr = article.halal ? `<div class="label-halal">A base d'ingrédients HALAL</div>` : "";
   const halalAr = article.halal ? `<div class="label-halal rtl">على أساس مكونات حلال</div>` : "";
@@ -36,7 +39,7 @@ function buildLabelHTML(article) {
   return `
     <div class="label" style="background:${escapeHtml(color)}">
       <div class="label-header">
-        <div class="label-emoticon">${escapeHtml(labelEmoticon(article))}</div>
+        ${headerIcon}
         <div class="label-name">${escapeHtml(article.nom_fr) || "…"}<span class="sep">•</span>${escapeHtml(article.nom_ar) || "…"}</div>
         ${subtitle}
       </div>
