@@ -59,19 +59,13 @@ async function initApp() {
   }
 
   await DB.getAll(DB.STORES.settings).catch(() => []);
+  await Settings.load();
 
   Router.register("/tableau-de-bord", renderDashboard);
   Router.register("/articles", ArticlesView.render);
   Router.register("/etiquettes", EtiquettesView.render);
   Router.register("/impression", ImpressionView.render);
-  Router.register("/parametres", async (outlet) => {
-    outlet.innerHTML = `
-      <div class="card" style="max-width:520px">
-        <h2 style="font-size:16px;font-weight:600;margin-bottom:4px">Paramètres</h2>
-        <p style="font-size:13.5px;color:var(--ink-soft);margin-top:0">Nom de l'entreprise, site web et préférences d'impression seront configurables ici.</p>
-      </div>
-    `;
-  });
+  Router.register("/parametres", ParametresView.render);
 
   Router.start();
 
