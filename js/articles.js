@@ -7,6 +7,7 @@ const ARTICLE_COLORS = [
   { key: "dinde", label: "Brun (Dinde)", hex: "#A9764F" },
   { key: "piquant", label: "Violet (Piquant)", hex: "#4A4785" },
   { key: "andalouse", label: "Orange (Andalouse)", hex: "#D9603B" },
+  { key: "boeuf", label: "Rouge (Bœuf)", hex: "#C23B32" },
 ];
 
 const DEFAULT_ALLERGENES_FR = "produit dans un atelier qui utilise tous les allergènes.";
@@ -24,6 +25,7 @@ function blankArticle() {
     sous_titre_ar: "",
     categorie: CATEGORIES[0],
     couleur: ARTICLE_COLORS[0].hex,
+    icone_entete: "",
     halal: false,
     poids_gr: "",
     conservation: DEFAULT_CONSERVATION,
@@ -48,6 +50,29 @@ function escapeHtml(str) {
   return String(str ?? "").replace(/[&<>"']/g, (c) => ({
     "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;",
   }[c]));
+}
+
+function resizeImageToDataURL(file, maxSize = 240) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onerror = () => reject(reader.error);
+    reader.onload = () => {
+      const img = new Image();
+      img.onerror = reject;
+      img.onload = () => {
+        const scale = Math.min(1, maxSize / Math.max(img.width, img.height));
+        const w = Math.max(1, Math.round(img.width * scale));
+        const h = Math.max(1, Math.round(img.height * scale));
+        const canvas = document.createElement("canvas");
+        canvas.width = w;
+        canvas.height = h;
+        canvas.getContext("2d").drawImage(img, 0, 0, w, h);
+        resolve(canvas.toDataURL("image/png"));
+      };
+      img.src = reader.result;
+    };
+    reader.readAsDataURL(file);
+  });
 }
 
 const ArticlesView = (() => {
@@ -224,11 +249,21 @@ const ArticlesView = (() => {
               </label>
             </div>
           </div>
-        </div>
 
-        <div class="card">
-          <h3 style="font-size:14px;font-weight:600;margin-bottom:14px">Ingrédients</h3>
-          <div class="form-grid-2">
+          <div style="margin-top:14px">
+            <span style="font-size:12.5px;color:var(--ink-soft);display:block;margin-bottom:8px">Icône d'en-tête (optionnel — remplace le symbole par défaut)</span>
+            <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+              <div id="icon-preview-wrap" style="display:flex;align-items:center;gap:8px">
+                ${article.icone_entete ? `<img id="icon-preview" src="${article.icone_entete}" style="height:40px;background:${article.couleur};padding:4px;border-radius:6px" /><button type="button" class="btn" id="icon-remove">Retirer</button>` : `<span id="icon-preview-empty" style="font-size:12.5px;color:var(--ink-soft)">Aucune icône — symbole par défaut utilisé</span>`}
+              </div>
+              <label class="btn" style="cursor:pointer;margin:0">
+                📷 Choisir une image
+                <input type="file" id="icon-upload" accept="image/*" style="display:none" />
+              </label>
+            </div>
+            <input type="hidden" name="icone_entete" id="icone_entete_input" value="${escapeHtml(article.icone_entete || "")}" />
+          </div>
+        </div>
             <label class="field"><span>Ingrédients (FR)</span><textarea name="ingredients_fr" rows="6" placeholder="Pain (farine de BLE...), ...">${escapeHtml(article.ingredients_fr)}</textarea></label>
             <label class="field"><span>المكونات (AR)</span><textarea dir="rtl" name="ingredients_ar" rows="6" placeholder="خبز (دقيق القمح...)، ...">${escapeHtml(article.ingredients_ar)}</textarea></label>
           </div>
@@ -273,6 +308,33 @@ const ArticlesView = (() => {
       outlet.querySelector('input[name="couleur_choice"][value="custom"]').checked = true;
     });
 
+    outlet.querySelector("#icon-upload")?.addEventListener("change", async (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      try {
+        const dataUrl = await resizeImageToDataURL(file);
+        outlet.querySelector("#icone_entete_input").value = dataUrl;
+        const currentColor = outlet.querySelector('input[name="couleur_choice"]:checked')?.value;
+        const preset = ARTICLE_COLORS.find((c) => c.key === currentColor);
+        const previewColor = preset ? preset.hex : outlet.querySelector('input[name="couleur_custom"]').value;
+        outlet.querySelector("#icon-preview-wrap").innerHTML = `
+          <img id="icon-preview" src="${dataUrl}" style="height:40px;background:${previewColor};padding:4px;border-radius:6px" />
+          <button type="button" class="btn" id="icon-remove">Retirer</button>
+        `;
+        outlet.querySelector("#icon-remove").addEventListener("click", clearIcon);
+      } catch (err) {
+        alert("Impossible de charger cette image.");
+      }
+    });
+
+    function clearIcon() {
+      outlet.querySelector("#icone_entete_input").value = "";
+      outlet.querySelector("#icon-upload").value = "";
+      outlet.querySelector("#icon-preview-wrap").innerHTML = `<span id="icon-preview-empty" style="font-size:12.5px;color:var(--ink-soft)">Aucune icône — symbole par défaut utilisé</span>`;
+    }
+
+    outlet.querySelector("#icon-remove")?.addEventListener("click", clearIcon);
+
     outlet.querySelector('[data-action="supprimer-form"]')?.addEventListener("click", async (e) => {
       const id = e.currentTarget.dataset.id;
       const current = await DB.get(DB.STORES.articles, id);
@@ -304,6 +366,7 @@ const ArticlesView = (() => {
         halal: fd.get("halal") === "on",
         actif: fd.get("actif") === "on",
         couleur,
+        icone_entete: fd.get("icone_entete") || "",
         ingredients_fr: fd.get("ingredients_fr").trim(),
         ingredients_ar: fd.get("ingredients_ar").trim(),
         allergenes_fr: fd.get("allergenes_fr").trim(),
