@@ -90,8 +90,8 @@ function buildLabelHTML(article) {
 
       <div class="label-footer-band" style="background:${escapeHtml(color)}">
         <span class="label-footer-made">Made by</span>
-        <span class="label-footer-brand">Pause Attitude</span>
-        <span class="label-footer-url">pauseattitude.ma</span>
+        <span class="label-footer-brand">${escapeHtml(Settings.current.nom)}</span>
+        <span class="label-footer-url">${escapeHtml(Settings.current.site_web)}</span>
       </div>
     </div>
   `;
