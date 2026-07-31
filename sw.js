@@ -1,25 +1,22 @@
-// Service worker — Pause Attitude · Gestion Étiquettes
-// Stratégie : app shell en cache-first, contenu versionné pour permettre
-// des mises à jour propres à chaque déploiement.
-
-const CACHE_VERSION = "pa-shell-v17";
+// Service worker — Pause Attitude · Catalogue
+const CACHE_VERSION = "pa-catalogue-v9";
 const APP_SHELL = [
   "./",
   "./index.html",
+  "./pro.html",
   "./manifest.json",
   "./css/styles.css",
-  "./css/label.css",
-  "./css/print.css",
+  "./css/fiche.css",
+  "./css/pro.css",
   "./js/app.js",
+  "./js/products.js",
   "./js/db.js",
-  "./js/router.js",
-  "./js/settings.js",
-  "./js/articles.js",
-  "./js/barcode.js",
-  "./js/label-template.js",
-  "./js/etiquettes.js",
-  "./js/impression.js",
-  "./js/parametres.js",
+  "./js/pro-router.js",
+  "./js/pro-articles.js",
+  "./js/pro-clients.js",
+  "./js/pro-commandes.js",
+  "./js/pro-fidelite.js",
+  "./js/pro-app.js",
   "./icons/icon-192.png",
   "./icons/icon-512.png",
   "./icons/icon-maskable-192.png",
@@ -38,22 +35,14 @@ self.addEventListener("activate", (event) => {
   event.waitUntil(
     caches
       .keys()
-      .then((keys) =>
-        Promise.all(
-          keys
-            .filter((key) => key !== CACHE_VERSION)
-            .map((key) => caches.delete(key))
-        )
-      )
+      .then((keys) => Promise.all(keys.filter((k) => k !== CACHE_VERSION).map((k) => caches.delete(k))))
       .then(() => self.clients.claim())
   );
 });
 
 self.addEventListener("fetch", (event) => {
   const { request } = event;
-
-  // Ne pas intercepter les requêtes hors origine (polices Google, etc.)
-  if (new URL(request.url).origin !== self.location.origin) return;
+  if (new URL(request.url).origin !== self.location.origin) return; // laisse passer les images/polices distantes
 
   event.respondWith(
     caches.match(request).then((cached) => {
